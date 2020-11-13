@@ -1,0 +1,28 @@
+######################################
+# Syntax Coloring Map For STEND
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MAX17215	KEYWORD1	MAX17215
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+_readCapacity		KEYWORD2
+_readVoltage		KEYWORD2
+_readCurrent		KEYWORD2
+_readTemperature	KEYWORD2
+_readCell1			KEYWORD2
+_readCell2			KEYWORD2
+_readCell3			KEYWORD2
+_readCell4			KEYWORD2
+_scan				KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
