@@ -12,6 +12,7 @@
 #define	OW_REG_C2V					0xd7
 #define	OW_REG_C3V					0xd6
 #define	OW_REG_C4V					0xd5
+#define	OW_REG_FCAP					0x35
 
 class MAX17215{
 	public:

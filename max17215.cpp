@@ -75,7 +75,12 @@ uint16_t MAX17215::_readCapacity(){
 		uint16_t capacity = _readReg(OW_REG_CAPACITY, OW_REG_MSB);
 		return capacity / 256; 
 }
-			
+	
+uint16_t MAX17215::_readFCap(){
+		uint16_t capacity = _readReg(OW_REG_FCAP, OW_REG_MSB);
+		return capacity; 
+}
+	
 uint16_t MAX17215::_readVoltage(){
 		uint16_t voltage = _readReg(OW_REG_VOLTAGE, OW_REG_MSB);
 		return voltage * 1.25F;
@@ -151,7 +156,7 @@ String MAX17215::GetData()
 	voltage = _readVoltage();
 	current = _readCurrent();
 	capacity = _readCapacity();
-	fCap = 0;
+	fCap = _readFCap();
 	temperature = _readTemperature();
 	ser = _readSerial();
 	stat = 0;
