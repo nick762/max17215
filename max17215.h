@@ -22,6 +22,7 @@ class MAX17215{
 		uint16_t _readCell2();
 		uint16_t _readCell3();
 		uint16_t _readCell4();
+		uint16_t _readFCap();
 		int _readCurrent();
 		int _readTemperature();
 		String GetData(void);
