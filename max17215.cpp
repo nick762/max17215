@@ -77,7 +77,18 @@ uint16_t MAX17215::_readCapacity(){
 }
 	
 uint16_t MAX17215::_readFCap(){
-		uint16_t capacity = _readReg(OW_REG_FCAP, OW_REG_MSB);
+	uint16_t capacity = _readReg(OW_REG_FCAP, OW_REG_MSB);
+	uint16_t rSense = _readReg(0xcf, 0x01);
+	int current = (int16_t)_readReg(OW_REG_CURRENT, OW_REG_MSB);
+	if(rSense == 500){		
+		return current * 1;
+	}else if(rSense == 1000){
+		return current * 0.5F;
+	}else if(rSense == 2000){
+		return current * 0,25F;
+	}else{
+		return -1;		
+	}
 		return capacity; 
 }
 	
