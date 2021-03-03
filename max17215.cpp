@@ -75,6 +75,14 @@ uint16_t MAX17215::_readCapacity(){
 		uint16_t capacity = _readReg(OW_REG_CAPACITY, OW_REG_MSB);
 		return capacity / 256; 
 }
+
+uint8_t MAX17215::_readType()
+{	
+	uint8_t type = lowByte(_readReg(OW_REG_TYPE, OW_REG_MSB));
+	type = type<<4;
+	Serial.println(type,HEX);
+	return type;
+}
 	
 uint16_t MAX17215::_readFCap(){
 	uint16_t capacity = (int16_t)_readReg(OW_REG_FCAP, OW_REG_MSB);
