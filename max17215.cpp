@@ -16,7 +16,7 @@ uint8_t MAX17215::_scan(){
 }			
 
 uint8_t MAX17215::_cellNum(){
-  boolean present;
+  /*boolean present;
   uint8_t vol; 
   present = _max.reset();
   _max.skip();
@@ -33,7 +33,11 @@ uint8_t MAX17215::_cellNum(){
     }
   }else{
     return 2;
-  }
+  }*/
+  	uint8_t num = lowByte(_readReg(0xb5, 0x01));
+	num = num<<4;
+	//Serial.println(type,HEX);
+	return num;
 }	
 		
 uint16_t MAX17215::_readReg(uint8_t lsb, uint8_t msb)
@@ -80,7 +84,7 @@ uint8_t MAX17215::_readType()
 {	
 	uint8_t type = lowByte(_readReg(OW_REG_TYPE, OW_REG_MSB));
 	type = type<<4;
-	Serial.println(type,HEX);
+	//Serial.println(type,HEX);
 	return type;
 }
 	
