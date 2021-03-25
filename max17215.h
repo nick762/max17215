@@ -30,6 +30,7 @@ class MAX17215{
 		String GetData(void);
 		uint8_t _scan();
 		void _writeData(uint8_t, uint8_t, uint8_t*);
+		void _fReset();
 		uint8_t _readSerial();
 		uint8_t _cellNum();
 	private:

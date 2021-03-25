@@ -16,28 +16,19 @@ uint8_t MAX17215::_scan(){
 }			
 
 uint8_t MAX17215::_cellNum(){
-  /*boolean present;
-  uint8_t vol; 
-  present = _max.reset();
-  _max.skip();
-  if(present == true){        
-    _max.write(0x69);
-    _max.write(0xb5);
-    _max.write(0x01);    
-    vol = _max.read();
-    vol = vol<<3;
-    if(vol <= 16){
-		return 0;
-    }else{
-		return 1;
-    }
-  }else{
-    return 2;
-  }*/
   	uint8_t num = lowByte(_readReg(0xb5, 0x01));
 	num = num<<4;
-	//Serial.println(type,HEX);
-	return num;
+	if(num == 16){
+		return 1;
+	}else if(num == 32){
+		return 2;
+	}else if(num == 48){
+		return 3;
+	}else if(num ==64){
+		return 4;
+	}else{
+		return 0;
+	}
 }	
 		
 uint16_t MAX17215::_readReg(uint8_t lsb, uint8_t msb)
@@ -61,19 +52,29 @@ uint16_t MAX17215::_readReg(uint8_t lsb, uint8_t msb)
 void MAX17215::_writeData(uint8_t lsb, uint8_t msb, uint8_t* data){
 	boolean present;
 	present = _max.reset();
+	_max.skip();
 	if(present){
 		_max.write(0x6c);
 		_max.write(lsb);
-		_max.write(msb,1);
+		_max.write(msb,1); //,1
 		_max.write(data[0]);
-		_max.write(data[1]);
-		delay(25);
-		//_max.write(data[i],1);
-		//for(int i=0; i<8; i++){
-		//	_max.write(data[i],1);
-		//}
+		_max.write(data[1],1);
 	}
 }
+
+void MAX17215::_fReset()
+{ 
+	byte dat1[] = {0x00,0x00};
+	byte dat2[] = {0x0f,0x00};
+	byte dat3[] = {0x01,0x00};
+	_writeData(0x80,0x00, dat1);
+	delay(10);
+	_writeData(0x60,0x00, dat2);
+	delay(10);
+	_writeData(0xBB,0x00, dat3);
+	delay(10);
+}
+	
 
 uint16_t MAX17215::_readCapacity(){
 		uint16_t capacity = _readReg(OW_REG_CAPACITY, OW_REG_MSB);
@@ -166,6 +167,8 @@ uint8_t MAX17215::_readSerial(){
 	}
 }
 
+
+
 String MAX17215::GetData()
 {	
 	String comm = ",";
@@ -173,7 +176,8 @@ String MAX17215::GetData()
 	uint16_t voltage,c1v,c2v,c3v,c4v,fCap,capacity;
 	uint8_t ser;
 	int temperature, current, stat, date;
-	
+	uint8_t num = _cellNum();
+
 	voltage = _readVoltage();
 	current = _readCurrent();
 	capacity = _readCapacity();
@@ -182,34 +186,29 @@ String MAX17215::GetData()
 	ser = _readSerial();
 	stat = 0;
 	date = 0;
-	c1v = _readCell1();
-	c2v = _readCell2();
-	c3v = _readCell3();
-	c4v = _readCell4();
-	//c3v = 0;
-	//c4v = 0;
-	
-	/*voltage = 16320;
-	current = 340;
-	capacity = 75;
-	fCap = 4570;
-	temperature = 22.10;
-	ser = 777;
-	stat = 1;
-	date = 1598610766;
-	c1v = 4100;
-	c2v = 3952;
-	c3v = 4023;
-	c4v = 4098;	*/
-	
-	//			0			  1				  2				 3			 4		 5		   6        7        8        9         10        11
-	
-	//{				
+	if(num == 1){
+		c1v = _readCell1();
+		c2v = 0;
+		c3v = 0;
+		c4v = 0;
+	}else if(num ==2){
+		c1v = _readCell1();
+		c2v = _readCell2();
+		c3v = 0;
+		c4v = 0;
+	}else if(num == 3){
+		c1v = _readCell1();
+		c2v = _readCell2();
+		c3v = _readCell3();
+		c4v = 0;
+	}else if(num == 4){
+		c1v = _readCell1();
+		c2v = _readCell2();
+		c3v = _readCell3();
+		c4v = _readCell4();	
+	}
+	{
 		data = voltage+comm+current+comm+temperature+comm+capacity+comm+c1v+comm+c2v+comm+c3v+comm+c4v+comm+ser+comm+stat+comm+date+comm+fCap;
-	//}
-	//{
-		//data = voltage+comm+current+comm+temperature+comm+capacity+comm+c1v+comm+c2v+comm+c3v+comm+c4v+comm+ser+comm+stat+comm+date;
-	//}
-	//delay(1000);
+	}
 	return data;
 }
