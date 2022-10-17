@@ -8,7 +8,10 @@ uint8_t MAX17215::_scan(){
 	uint8_t addr[8];
 	_max.reset_search();
 	if(!_max.search(addr)){
-		_max.reset_search();
+		//for(byte i=0; i++; i<5){
+			_max.reset_search();
+		//	delay(1000);
+		//}
 		return 0;
 	}else{
 		return 1;
@@ -58,7 +61,7 @@ void MAX17215::_writeData(uint8_t lsb, uint8_t msb, uint8_t* data){
 		_max.write(lsb);
 		_max.write(msb,1); //,1
 		_max.write(data[0]);
-		_max.write(data[1],1);
+		_max.write(data[1]);
 	}
 }
 
@@ -186,26 +189,37 @@ String MAX17215::GetData()
 	ser = _readSerial();
 	stat = 0;
 	date = 0;
-	if(num == 1){
-		c1v = _readCell1();
-		c2v = 0;
-		c3v = 0;
-		c4v = 0;
-	}else if(num ==2){
-		c1v = _readCell1();
-		c2v = _readCell2();
-		c3v = 0;
-		c4v = 0;
-	}else if(num == 3){
-		c1v = _readCell1();
-		c2v = _readCell2();
-		c3v = _readCell3();
-		c4v = 0;
-	}else if(num == 4){
-		c1v = _readCell1();
-		c2v = _readCell2();
-		c3v = _readCell3();
-		c4v = _readCell4();	
+	switch(num){
+		case 1:
+			c1v = _readCell1();
+			c2v = 0;
+			c3v = 0;
+			c4v = 0;
+			break;
+		case 2:
+			c1v = _readCell1();
+			c2v = _readCell2();
+			c3v = 0;
+			c4v = 0;
+			break;
+		case 3:
+			c1v = _readCell1();
+			c2v = _readCell2();
+			c3v = _readCell3();
+			c4v = 0;
+			break;
+		case 4:
+			c1v = _readCell1();
+			c2v = _readCell2();
+			c3v = _readCell3();
+			c4v = _readCell4();
+			break;
+		default:
+			c1v = 0;
+			c2v = 0;
+			c3v = 0;
+			c4v = 0;	
+			break;
 	}
 	{
 		data = voltage+comm+current+comm+temperature+comm+capacity+comm+c1v+comm+c2v+comm+c3v+comm+c4v+comm+ser+comm+stat+comm+date+comm+fCap;
