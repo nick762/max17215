@@ -102,7 +102,9 @@ uint16_t MAX17215::_readFCap(){
 	}else if(rSense == 2000){
 		return capacity * 0.25F;
 	}else{
-		return -1;		
+		//return -1;
+		//return current * 28.935F / 100;
+		return current * ((156250 / rSense ) / 10) / 100		
 	}
 }
 	
