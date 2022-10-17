@@ -123,7 +123,9 @@ int MAX17215::_readCurrent(){
 	}else if(rSense == 2000){
 		return current * 7.8125F / 100;
 	}else{
-		return -1;		
+		//return -1;
+		//return current * 28.935F / 100;
+		return current * ((156250 / rSense ) / 10) / 100;		
 	}
 }
 
